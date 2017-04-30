@@ -20,7 +20,18 @@ const SET_CONTEXT    = 'SET_CONTEXT'
 
 const TEST_HINT = '\n(HINT: if you are getting this errors in tests, consider using createMockTask from redux-saga/utils)'
 
-const effect = (type, payload) => ({[IO]: true, [type]: payload})
+const effect = (type, payload) => {
+  const obj = {
+    [IO]: true,
+    [type]: payload
+  };
+
+  Object.defineProperty(obj, IO, {
+    enumerable: false
+  });
+
+  return obj;
+};
 
 export function take(patternOrChannel = '*') {
   if (arguments.length) {

@@ -122,3 +122,16 @@ test('processor output handling', assert => {
   }, DELAY)
 
 });
+
+test('effects do not enumerate IO', assert => {
+  assert.plan(1)
+
+  function* genFn(arg) {
+    yield io.put(arg)
+  }
+
+  const gen = genFn('arg')
+  const actual = gen.next()
+  const expected = { done: false, value: { PUT: { action: 'arg', channel: null } } }
+  assert.deepEqual(actual, expected)
+});
